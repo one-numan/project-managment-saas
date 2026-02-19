@@ -1,15 +1,3 @@
-Perfect ✅
-Below is your **README.md** tailored for:
-
-* 🎯 Project Management SaaS
-* 🎓 Teaching MVP Architecture
-* 🏢 Multi-Tenant Architecture (Scalable Design Vision)
-* ⚡ FastAPI + Jinja + PostgreSQL + SQLAlchemy
-
-You can directly copy this into `README.md`.
-
----
-
 # 🚀 Project Management SaaS – MVP
 
 ## 📌 Overview
