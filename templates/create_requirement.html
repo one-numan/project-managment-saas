@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block header %}Add Requirement{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h5>Project: {{ project.name }}</h5>
+
+        <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Requirement</label>
+                <textarea name="requirement"
+                          class="form-control"
+                          rows="4"
+                          required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Save Requirement
+            </button>
+
+            <a href="/project-manager/projects/{{ project.id }}"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

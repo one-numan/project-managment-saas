@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block header %}All Tasks{% endblock %}
+
+{% block content %}
+
+<!-- ================= FILTER SECTION ================= -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <form method="get" class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label">Filter by Project</label>
+                <select name="project_id"
+                        class="form-select"
+                        onchange="this.form.submit()">
+
+                    <option value="">All Projects</option>
+
+
+                    {% for project in projects %}
+                        <option value="{{ project.id }}"
+                            {% if selected_project == project.id %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ project.name }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- ================= TASK TABLE ================= -->
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Project</th>
+                    <th>Developer</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for task in tasks %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ task.task }}</td>
+                <td>{{ task.project.name }}</td>
+                <td>
+                    {{ task.assignee.name if task.assignee else "Not Assigned" }}
+                </td>
+                <td>
+                    <span class="badge
+                        {% if task.status.name == "COMPLETED" %}
+                            bg-success
+                        {% elif task.status.name == "IN_PROGRESS" %}
+                            bg-warning
+                        {% else %}
+                            bg-secondary
+                        {% endif %}
+                    ">
+                        {{ task.status.value }}
+                    </span>
+                </td>
+                <td>
+                    {{ task.created_at.strftime('%d %b %Y') }}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">
+                    No Tasks Found
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+<!-- ================= PAGINATION ================= -->
+
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% for p in range(1, total_pages + 1) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+            <a class="page-link"
+               href="?page={{ p }}{% if selected_project %}&project_id={{ selected_project }}{% endif %}">
+                {{ p }}
+            </a>
+        </li>
+        {% endfor %}
+
+    </ul>
+</nav>
+
+{% endblock %}

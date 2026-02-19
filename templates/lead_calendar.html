@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block header %}Team Task Calendar{% endblock %}
+
+{% block content %}
+
+<h5>Developer Daily Task View</h5>
+
+{% for date, tasks in calendar_data.items() | sort %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <h6 class="fw-bold">
+            {{ date.strftime('%d %B %Y') }}
+        </h6>
+
+        <table class="table table-bordered mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Task</th>
+                    <th>Developer</th>
+                    <th>Status</th>
+                    <th>Project</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.task }}</td>
+                <td>{{ task.assignee.name if task.assignee else "-" }}</td>
+                <td>
+                    <span class="badge
+                        {% if task.status.name == "COMPLETED" %}
+                            bg-success
+                        {% elif task.status.name == "IN_PROGRESS" %}
+                            bg-warning
+                        {% else %}
+                            bg-secondary
+                        {% endif %}
+                    ">
+                        {{ task.status.value }}
+                    </span>
+                </td>
+                <td>{{ task.project.name }}</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info">
+    No Scheduled Tasks
+</div>
+{% endfor %}
+
+{% endblock %}

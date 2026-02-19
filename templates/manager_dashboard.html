@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Project Manager Dashboard{% endblock %}
+{% block header %}Project Manager Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- =================== QUICK ACTIONS =================== -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body d-flex flex-wrap gap-2">
+
+        <a href="/project-manager/projects/create"
+           class="btn btn-primary">
+            + Create Project
+        </a>
+
+        <a href="/project-manager/projects"
+           class="btn btn-outline-secondary">
+            View All Projects
+        </a>
+
+    </div>
+</div>
+
+
+<!-- =================== STATS CARDS =================== -->
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h6>Total Projects</h6>
+                <h3>{{ total_projects }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h6>Total Tasks</h6>
+                <h3>{{ total_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h6>Completed Tasks</h6>
+                <h3 class="text-success">{{ completed_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h6>Pending Tasks</h6>
+                <h3 class="text-danger">{{ pending_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- =================== OVERALL PROGRESS =================== -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>Overall Progress</h5>
+        <div class="progress mt-3">
+            <div class="progress-bar bg-success"
+                 role="progressbar"
+                 style="width: {{ progress_percentage }}%;">
+                {{ progress_percentage }}%
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- =================== ALERT SECTION =================== -->
+
+{% if projects_without_lead > 0 or projects_without_requirements > 0 %}
+<div class="alert alert-warning d-flex justify-content-between align-items-center">
+
+    <div>
+        <strong>Attention Required:</strong>
+        <ul class="mb-0">
+            {% if projects_without_lead > 0 %}
+            <li>{{ projects_without_lead }} project(s) without assigned Lead</li>
+            {% endif %}
+            {% if projects_without_requirements > 0 %}
+            <li>{{ projects_without_requirements }} project(s) without requirements</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- <div>
+        <a href="/project-manager/projects"
+           class="btn btn-sm btn-dark">
+            Fix Now
+        </a>
+    </div> -->
+
+</div>
+{% endif %}
+
+
+<!-- =================== RECENT PROJECTS =================== -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>Recent Projects</h5>
+
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Project Name</th>
+                    <th>Lead</th>
+                    <th>Requirements</th>
+                    <th>Created On</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for project in recent_projects %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td>
+                    <a href="/project-manager/projects/{{ project.id }}">
+                        {{ project.name }}
+                    </a>
+
+                    {% if not project.requirements %}
+                        <span class="badge bg-danger ms-2">
+                            No Requirements
+                        </span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {{ project.owner.name if project.owner else "Not Assigned" }}
+                </td>
+
+                <td>
+                    {{ project.requirements|length }}
+                </td>
+
+                <td>
+                    {{ project.created_at.strftime('%d %b %Y') }}
+                </td>
+
+                <td>
+                    <a href="/project-manager/projects/{{ project.id }}"
+                       class="btn btn-sm btn-outline-primary">
+                        View
+                    </a>
+
+                    <a href="/project-manager/projects/{{ project.id }}/requirements/create"
+                       class="btn btn-sm btn-outline-success">
+                        + Requirement
+                    </a>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">
+                    No Projects Found
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- =================== LEAD DISTRIBUTION =================== -->
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5>Lead Distribution</h5>
+
+        <table class="table table-bordered mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Lead Name</th>
+                    <th>Assigned Projects</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for lead_name, count in lead_distribution %}
+                <tr>
+                    <td>{{ lead_name }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2" class="text-center text-muted">
+                        No Leads Assigned
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

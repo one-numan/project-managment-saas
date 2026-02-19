@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block header %}Project Detail{% endblock %}
+
+{% block content %}
+
+<!-- ================= Project Info ================= -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <h4>{{ project.name }}</h4>
+        <p>
+            Lead:
+            <strong>
+                {{ project.owner.name if project.owner else "Not Assigned" }}
+            </strong>
+        </p>
+
+        <p>
+            Created On:
+            {{ project.created_at.strftime('%d %b %Y') }}
+        </p>
+
+    </div>
+</div>
+
+<!-- ================= Stats ================= -->
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Requirements</h6>
+                <h4>{{ total_requirements }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Total Tasks</h6>
+                <h4>{{ total_tasks }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Completed</h6>
+                <h4 class="text-success">{{ completed_tasks }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Pending</h6>
+                <h4 class="text-danger">{{ pending_tasks }}</h4>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= Progress Bar ================= -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>Project Progress</h5>
+        <div class="progress mt-3">
+            <div class="progress-bar bg-success"
+                 role="progressbar"
+                 style="width: {{ progress_percentage }}%;">
+                {{ progress_percentage }}%
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= Requirements ================= -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>Requirements</h5>
+
+        <ul class="list-group mt-3">
+            {% for req in project.requirements %}
+                <li class="list-group-item">
+                    {{ req.requirement }}
+                    <br>
+                    <small class="text-muted">
+                        Created by {{ req.creator.name }}
+                    </small>
+                </li>
+            {% else %}
+                <li class="list-group-item text-muted">
+                    No Requirements Added
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- ================= Tasks ================= -->
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5>Tasks</h5>
+
+        <table class="table table-bordered mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Developer</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in project.tasks %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ task.task }}</td>
+                    <td>
+                        {{ task.assignee.name if task.assignee else "Not Assigned" }}
+                    </td>
+                    <td>
+                        <span class="badge
+                        {% if task.status.name == 'COMPLETED' %}
+                            bg-success
+                        {% elif task.status.name == 'IN_PROGRESS' %}
+                            bg-warning
+                        {% else %}
+                            bg-secondary
+                        {% endif %}
+                        ">
+                            {{ task.status.value }}
+                        </span>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        No Tasks Found
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}
+

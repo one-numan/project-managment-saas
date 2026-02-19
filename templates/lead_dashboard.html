@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block header %}Team Lead Execution Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- ================= OVERVIEW ================= -->
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Assigned Projects</h6>
+                <h3>{{ total_projects }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Total Tasks</h6>
+                <h3>{{ total_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Completed</h6>
+                <h3 class="text-success">{{ completed_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Pending</h6>
+                <h3 class="text-danger">{{ pending_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= OVERALL PROGRESS ================= -->
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>Overall Progress</h5>
+        <div class="progress mt-2">
+            <div class="progress-bar bg-success"
+                 style="width: {{ overall_progress }}%;">
+                {{ overall_progress }}%
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= PROJECT SECTIONS ================= -->
+
+{% for data in dashboard_data %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>{{ data.project.name }}</h5>
+
+            <a href="/lead-manager/projects/{{ data.project.id }}/tasks/create"
+               class="btn btn-sm btn-primary">
+                + Create Task
+            </a>
+        </div>
+
+        <!-- Project Progress -->
+        <div class="progress my-3">
+            <div class="progress-bar bg-info"
+                 style="width: {{ data.progress }}%;">
+                {{ data.progress }}%
+            </div>
+        </div>
+
+        <!-- Requirements Count -->
+        <p>
+            <strong>Requirements:</strong>
+            {{ data.project.requirements|length }}
+        </p>
+
+        <!-- Tasks Table -->
+        <table class="table table-bordered table-sm mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Developer</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for task in data.tasks %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ task.task }}</td>
+                <td>
+                    {{ task.assignee.name if task.assignee else "Not Assigned" }}
+                </td>
+                <td>
+                    <span class="badge
+                        {% if task.status.name == "COMPLETED" %}
+                            bg-success
+                        {% elif task.status.name == "IN_PROGRESS" %}
+                            bg-warning
+                        {% else %}
+                            bg-secondary
+                        {% endif %}
+                    ">
+                        {{ task.status.value }}
+                    </span>
+                </td>
+                <td>
+                    <a href="/lead-manager/tasks/{{ task.id }}/edit"
+                       class="btn btn-sm btn-outline-primary">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">
+                    No Tasks Created
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block header %}Edit Task{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Task Name</label>
+                <input type="text"
+                       name="task_name"
+                       value="{{ task.task }}"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Assign Developer</label>
+                <select name="developer_id"
+                        class="form-select"
+                        required>
+                    {% for dev in developers %}
+                        <option value="{{ dev.id }}"
+                            {% if task.assigned_to == dev.id %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ dev.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="status"
+                        class="form-select"
+                        required>
+                    {% for status in ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"] %}
+                        <option value="{{ status }}"
+                            {% if task.status.name == status %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ status.replace("_", " ") }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-success">
+                Update Task
+            </button>
+
+            <a href="/lead-manager/projects/{{ task.project_id }}"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

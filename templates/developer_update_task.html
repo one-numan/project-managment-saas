@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block header %}Update Task{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h5>{{ task.task }}</h5>
+        <p><strong>Project:</strong> {{ task.project.name }}</p>
+
+        <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="status"
+                        class="form-select">
+                    {% for status in ["NOT_STARTED","IN_PROGRESS","COMPLETED"] %}
+                        <option value="{{ status }}"
+                            {% if task.status.name == status %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ status.replace("_"," ") }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button class="btn btn-success">
+                Update Status
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

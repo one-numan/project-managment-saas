@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block header %}Developer Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Total Tasks</h6>
+                <h3>{{ total_tasks }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Completed</h6>
+                <h3 class="text-success">{{ completed }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>In Progress</h6>
+                <h3 class="text-warning">{{ in_progress }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Not Started</h6>
+                <h3 class="text-secondary">{{ not_started }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>Overall Progress</h5>
+        <div class="progress mt-2">
+            <div class="progress-bar bg-success"
+                 style="width: {{ progress }}%;">
+                {{ progress }}%
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5>My Tasks</h5>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Task</th>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ task.task }}</td>
+            <td>{{ task.project.name }}</td>
+            <td>
+                <span class="badge
+                    {% if task.status.name == "COMPLETED" %}
+                        bg-success
+                    {% elif task.status.name == "IN_PROGRESS" %}
+                        bg-warning
+                    {% else %}
+                        bg-secondary
+                    {% endif %}
+                ">
+                    {{ task.status.value }}
+                </span>
+            </td>
+            <td>
+                <a href="/developer/tasks/{{ task.id }}/update"
+                   class="btn btn-sm btn-primary">
+                    Update
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5" class="text-center text-muted">
+                No Tasks Assigned
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

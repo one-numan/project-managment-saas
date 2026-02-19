@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block header %}My Projects{% endblock %}
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Project</th>
+            <th>Tasks</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for project in projects %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ project.name }}</td>
+            <td>{{ project.tasks|length }}</td>
+            <td>
+                <a href="/lead-manager/projects/{{ project.id }}"
+                   class="btn btn-sm btn-primary">
+                    Manage
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                No Projects Assigned
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

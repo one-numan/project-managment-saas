@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block header %}Dashboard Overview{% endblock %}
+
+{% block content %}
+
+<!-- ================= Stats Cards ================= -->
+
+<div class="row mb-4">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Total Projects</h6>
+                <h3>8</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Total Tasks</h6>
+                <h3>24</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Pending Tasks</h6>
+                <h3>5</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= Role Based Checklist ================= -->
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h5 class="mb-3">Your Responsibilities</h5>
+
+        {% if role == "PROJECT_MANAGER" %}
+
+            <ul class="list-group">
+                <li class="list-group-item">✔ Create Project</li>
+                <li class="list-group-item">✔ Add Client Ask</li>
+                <li class="list-group-item">✔ Assign Lead</li>
+                <li class="list-group-item">✔ Monitor Progress</li>
+            </ul>
+
+        {% elif role == "LEAD" %}
+
+            <ul class="list-group">
+                <li class="list-group-item">✔ View Assigned Projects</li>
+                <li class="list-group-item">✔ Add Requirements</li>
+                <li class="list-group-item">✔ Create Tasks</li>
+                <li class="list-group-item">✔ Assign Developer</li>
+            </ul>
+
+        {% elif role == "DEVELOPER" %}
+
+            <ul class="list-group">
+                <li class="list-group-item">✔ View Assigned Tasks</li>
+                <li class="list-group-item">✔ Update Task Status</li>
+                <li class="list-group-item">✔ Add Remarks</li>
+                <li class="list-group-item">✔ Track Effort</li>
+            </ul>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

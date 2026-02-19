@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block header %}Create New Project{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form method="post" action="/project-manager/projects/create">
+
+            <div class="mb-3">
+                <label class="form-label">Project Name</label>
+                <input type="text" name="name"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Assign Lead</label>
+                <select name="lead_id" class="form-select" required>
+                    <option value="">Select Lead</option>
+                    {% for lead in leads %}
+                        <option value="{{ lead.id }}">
+                            {{ lead.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Create Project
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

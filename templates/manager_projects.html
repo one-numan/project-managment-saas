@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block header %}My Projects{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-3">
+    <h5>Projects</h5>
+    <a href="/project-manager/projects/create" class="btn btn-primary">
+        Create Project
+    </a>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Project Name</th>
+            <th>Lead</th>
+            <th>Created On</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for project in projects %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ project.name }}</td>
+            <td>{{ project.owner.name }}</td>
+            <td>{{ project.created_at.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                No Projects Found
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}
