@@ -235,23 +235,3 @@ This project teaches:
 * REST API exposure for frontend apps
 
 ---
-
-# 📌 Philosophy
-
-> Build simple.
-> Understand deeply.
-> Scale wisely.
-
-This project is not about features.
-It is about architecture thinking.
-
----
-
-If you want, next we can:
-
-* 🔥 Improve this README to "Open Source Level"
-* 📊 Add ER Diagram section
-* 🏢 Add detailed Multi-Tenant Architecture document
-* 🧩 Convert this into professional SaaS documentation style
-
-Tell me what level you want now 👌
